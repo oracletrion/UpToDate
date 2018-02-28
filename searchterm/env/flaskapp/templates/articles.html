@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>Articles</h1>
+  <ul class = "list-group">
+    {% for entry in entries %}
+      <li class = "list-group-item"><a href = "{{entry.submURL}}">{{entry.submTitle}}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
