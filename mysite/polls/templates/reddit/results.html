@@ -1,6 +1,7 @@
+{% extends 'layout.html' %}
+{% block body %}
 <h1>{{ title }}</h1>
-
-<ul>
+<ul class = 'list-group'>
 {% for post in reddit %}
     <li>{{ post.pub_date }} 
         <ul>
@@ -9,3 +10,4 @@
     </li>
 {% endfor %}
 </ul>
+{% endblock %}
