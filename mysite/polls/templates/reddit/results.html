@@ -1,13 +1,18 @@
+<!doctype HTML>
+<html>
 {% extends 'layout.html' %}
 {% block body %}
 <h1>{{ title }}</h1>
 <ul class = 'list-group'>
 {% for post in reddit %}
-    <li>{{ post.pub_date }} 
-        <ul>
-            <li>{{ post.title }}</li>
-        </ul>
-    </li>
-{% endfor %}
+	<div class="card" style="width: 20rem;">
+		<img class="card-img-top" src="..." alt="Card image cap">
+		<div class="card-block">
+			<h4 class="card-title">{{ post.title }}</h4>
+			<p class="card-text">{{ post.pub_date }}</p>
+		</div>
+	</div>
+	{% endfor %}
 </ul>
 {% endblock %}
+</html>
