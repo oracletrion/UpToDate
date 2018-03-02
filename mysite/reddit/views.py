@@ -11,11 +11,12 @@ import datetime
 
 
 from .models import Subreddit_Info, Reddit_Post
+from django.shortcuts import redirect
 
 # Create your views here.
 
 def index(request):
-    return HttpResponse("This is the reddit index.")
+	return redirect('form')
 
 def form(request):
     return render(request, 'reddit/index.html')
@@ -46,23 +47,46 @@ def search(request):
     
         titles = "<b>" + subreddit.display_name + "</b><br/><br/>"
         i = 1
-    
-        for submission in reddit.subreddit(sub_name).hot(limit=5):
-            time = datetime.datetime.fromtimestamp(submission.created)
+        limits = 5
+        limitMax = 5
+        lFlag = True
+        while lFlag: 
+        
+            
+            print("start: ", limits)
+            
+            limVal = limits + limitMax
+            limits = limitMax
+             
+            for submission in reddit.subreddit(sub_name).hot(limit = limVal ):
+                
+            
+                print("loop: ", limits)
+                if limits == 0:
+                    lFlag = False
+                    break
+                if submission.stickied is False:
+                    time = datetime.datetime.fromtimestamp(submission.created)
 #             titles = titles + str(i) + ". " + submission.title + "<br/>&emsp;&emsp;" + str(time) + "<br/>" #print(submission.title)
 #             i = i + 1
 
                 # this avoids integrity errors from unique constraints
-            Reddit_Post.objects.get_or_create(subreddit=sub_name,title=submission.title,pub_date=time)
-                        
+            
+                    Reddit_Post.objects.get_or_create(subreddit=sub_name,title=submission.title,pub_date=time)
+                    limits -= 1
+                    print ("Limits in if", limits)
+                  
 #             red_post = Reddit_Post()
 #             red_post.subreddit = sub_name
 #             red_post.title = submission.title
 #             red_post.pub_date = time
 #             red_post.save()
+            if limits == 0:
+                break
             
         qs = Reddit_Post.objects.filter(subreddit=sub_name).order_by('-pub_date')
-            
+         
+   
         return render(request, 'reddit/results.html', {'reddit': qs, 'title': sub_name})
         #return HttpResponse(titles)#subreddit.display_name + subreddit.title + subreddit.description)
         
