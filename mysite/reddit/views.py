@@ -11,11 +11,12 @@ import datetime
 
 
 from .models import Subreddit_Info, Reddit_Post
+from django.shortcuts import redirect
 
 # Create your views here.
 
 def index(request):
-    return HttpResponse("This is the reddit index.")
+	return redirect('form')
 
 def form(request):
     return render(request, 'reddit/index.html')
