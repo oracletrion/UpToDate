@@ -2,17 +2,21 @@
 <html>
 {% extends 'layout.html' %}
 {% block body %}
-<h1>{{ title }}</h1>
+<div class="container">
+<div class="row justify-content-center align-self-center"</div>
+	<h1>{{ title }}</h1>
+</div>
+<div class="row justify-content-center align-self-center">
 <ul class = 'list-group'>
 {% for post in reddit %}
 	<div class="card" style="width: 20rem;">
-		<img class="card-img-top" src="..." alt="Card image cap">
-		<div class="card-block">
+		<div class="card-body">
 			<h4 class="card-title">{{ post.title }}</h4>
 			<p class="card-text">{{ post.pub_date }}</p>
 		</div>
 	</div>
 	{% endfor %}
 </ul>
+</div>
 {% endblock %}
 </html>
