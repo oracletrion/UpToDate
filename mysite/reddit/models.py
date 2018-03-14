@@ -23,6 +23,7 @@ class Subreddit_Info(models.Model):
 class Reddit_Post(models.Model):
     subreddit = models.CharField(max_length=200, default='')
     title = models.CharField(max_length=200)
+    link = models.CharField(max_length=250, default='')
     pub_date = models.DateTimeField('date published')
     def __str__(self):
         return self.title

@@ -7,6 +7,7 @@ from django.urls import reverse
 
 import requests
 import praw
+import prawcore
 import datetime
 
 
@@ -40,6 +41,8 @@ def search(request):
                       
         # assume you have a Reddit instance bound to variable `reddit`
         subreddit = reddit.subreddit(sub_name)#('redditdev')
+
+
     
     #     print(subreddit.display_name)   # Output: redditdev
     #     print(subreddit.title)          # Output: reddit Development
@@ -58,31 +61,35 @@ def search(request):
             limVal = limits + limitMax
             limits = limitMax
              
-            for submission in reddit.subreddit(sub_name).hot(limit = limVal ):
-                
-            
-                print("loop: ", limits)
-                if limits == 0:
-                    lFlag = False
-                    break
-                if submission.stickied is False:
-                    time = datetime.datetime.fromtimestamp(submission.created)
-#             titles = titles + str(i) + ". " + submission.title + "<br/>&emsp;&emsp;" + str(time) + "<br/>" #print(submission.title)
-#             i = i + 1
-
-                # this avoids integrity errors from unique constraints
-            
-                    Reddit_Post.objects.get_or_create(subreddit=sub_name,title=submission.title,pub_date=time)
-                    limits -= 1
-                    print ("Limits in if", limits)
-                  
-#             red_post = Reddit_Post()
-#             red_post.subreddit = sub_name
-#             red_post.title = submission.title
-#             red_post.pub_date = time
-#             red_post.save()
-            if limits == 0:
-                break
+            try:
+	            for submission in reddit.subreddit(sub_name).hot(limit = limVal ):
+	                
+	            
+	                print("loop: ", limits)
+	                if limits == 0:
+	                    lFlag = False
+	                    break
+	                if submission.stickied is False:
+	                    time = datetime.datetime.fromtimestamp(submission.created)
+	#             titles = titles + str(i) + ". " + submission.title + "<br/>&emsp;&emsp;" + str(time) + "<br/>" #print(submission.title)
+	#             i = i + 1
+	
+	                # this avoids integrity errors from unique constraints
+	            
+	                    Reddit_Post.objects.get_or_create(subreddit=sub_name,title=submission.title,pub_date=time)
+	                    limits -= 1
+	                    print ("Limits in if", limits)
+	                  
+	#             red_post = Reddit_Post()
+	#             red_post.subreddit = sub_name
+	#             red_post.title = submission.title
+	#             red_post.pub_date = time
+	#             red_post.save()
+	            if limits == 0:
+	                break
+            except prawcore.NotFound:
+                return HttpResponse("not found") + render('reddit/index.html')
+#                 return redirect('form')
             
         qs = Reddit_Post.objects.filter(subreddit=sub_name).order_by('-pub_date')
          
