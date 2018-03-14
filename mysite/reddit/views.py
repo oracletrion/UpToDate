@@ -17,7 +17,6 @@ from django.shortcuts import redirect
 
 def index(request):
 	return redirect('form')
-#     return HttpResponse("This is the reddit index.")
 
 def form(request):
     return render(request, 'reddit/index.html')
