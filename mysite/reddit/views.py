@@ -88,7 +88,7 @@ def search(request):
 	            if limits == 0:
 	                break
             except prawcore.NotFound:
-                return HttpResponse("not found") + render('reddit/index.html')
+                return render(request, 'reddit/indexerr.html')
 #                 return redirect('form')
             
         qs = Reddit_Post.objects.filter(subreddit=sub_name).order_by('-pub_date')

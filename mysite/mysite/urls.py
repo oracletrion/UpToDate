@@ -18,5 +18,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include('reddit.urls')),
+    path('reddit/', admin.site.urls),
     path('admin/', admin.site.urls),
 ]
