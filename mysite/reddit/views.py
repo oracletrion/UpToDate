@@ -20,7 +20,8 @@ def index(request):
 	return redirect('form')
 
 def form(request):
-    return render(request, 'reddit/index.html')
+    qs = Reddit_Post.objects.order_by('-pub_date')
+    return render(request, 'reddit/index.html', {'reddit' : qs})
     #return render(request, 'reddit/form.html')
 
 def search(request):
@@ -88,7 +89,7 @@ def search(request):
 	            if limits == 0:
 	                break
             except prawcore.NotFound:
-                return render(request, 'reddit/indexerr.html')
+                return HttpResponse("not found") + render('reddit/index.html')
 #                 return redirect('form')
             
         qs = Reddit_Post.objects.filter(subreddit=sub_name).order_by('-pub_date')

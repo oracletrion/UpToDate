@@ -20,14 +20,44 @@
   </form>
   <ul class = 'list-group'>
 {% for post in reddit %}
+ <div class="listings">
 	<div class="card" style="width: 20rem;">
 		<div class="card-body">
 			<h4 class="card-title">{{ post.title }}</h4>
 			<p class="card-text">{{ post.pub_date }}</p>
+			<a href="http://www.reddit.com">Reddit link</a>
 		</div>
 	</div>
+</div>
 	{% endfor %}
 </ul>
+<script>
 
+var list = document.getElementsByClassName("listings");
+for(i = 3; i < list.length; i++) {
+	list[i].hidden = true;
+}
+showcounter = 4;
+removecounter = 0;
+var cycle = setInterval(function () {
+	list[removecounter].hidden = true;
+	list[showcounter].hidden = false;
+	showcounter++;
+	temp = removecounter;
+	op = 0.99;
+	var fade = setInterval(function () {
+		list[temp].style.opacity = op;
+		op-=.01;
+		console.log(op);
+		if(op < 0)
+			window.clearInterval(fade);
+	}, 100);
+	removecounter++;
+	console.log("rest");
+	
+}, 3000);
+
+</script
 {% endblock %}
+
 </html>
