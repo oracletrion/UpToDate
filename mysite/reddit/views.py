@@ -22,6 +22,21 @@ def form(request):
     return render(request, 'reddit/index.html')
     #return render(request, 'reddit/form.html')
 
+def youtube(request):
+    return render(request, 'reddit/results.html')
+
+def archives(request):
+
+
+    # return render(request, 'reddit/archives.html')
+    subname_list = set()
+    for sub in Reddit_Post.objects.all():
+        sub_name = sub.subreddit
+        subname_list.add(sub_name)
+        # qs = Reddit_Post.objects.filter(subreddit=sub_name).order_by('-pub_date')
+   
+    return render(request, 'reddit/archives.html', {'set': subname_list})
+
 def search(request):
 
     if request.method == 'POST':
