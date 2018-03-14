@@ -18,6 +18,16 @@
 			<button type="submit" class="btn btn-default">Search</button>
     </div>
   </form>
+  <ul class = 'list-group'>
+{% for post in reddit %}
+	<div class="card" style="width: 20rem;">
+		<div class="card-body">
+			<h4 class="card-title">{{ post.title }}</h4>
+			<p class="card-text">{{ post.pub_date }}</p>
+		</div>
+	</div>
+	{% endfor %}
+</ul>
 
 {% endblock %}
 </html>
