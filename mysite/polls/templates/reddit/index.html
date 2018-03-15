@@ -5,7 +5,7 @@
 {% load static %}
 
 {% block body %}
-  <body background="https://i.imgur.com/IQi3GBJ.jpg" style="background-size:cover">
+  <body background="https://i.imgur.com/IQi3GBJ.jpg" style="background-size:3008px 2000px">
   <div class = "jumbotron text-center" style="background: none">
     <h1>Up to Date</h1>
     <p class = "lead"> What would you like to know about?</p>
@@ -21,8 +21,8 @@
   <ul class = 'list-group'>
 {% for post in reddit %}
  <div class="listings row justify-content-center align-self-center">
-	<div class="card" style="width: 20rem;">
-		<div class="card-body">
+	<div class="card" style="width: 20rem; background-color: #96add3; opacity: 0.9">
+		<div class="card-body"  background-color="yellow">
 			<h4 class="card-title">{{ post.title }}</h4>
 			<p class="card-text">{{ post.pub_date }}</p>
 			<a href="http://www.reddit.com">Reddit link</a>
