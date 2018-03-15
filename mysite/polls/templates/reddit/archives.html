@@ -29,22 +29,52 @@
     </div>
 -->
 
-
-<select name=set method='GET' action = "/archives">
+<div class="row justify-content-center align-self-center">
+<select id="selector">
     {% for s in set %}
     <option value = "{{s}}" selected>{{s}}</option>
     {% endfor %}
 </select>
+</div>
+<div class="row justify-content-center align-self-center">
 {% for post in reddit %}
-<div class="{{post.sub_name}}">   
+  <div class="list {{post.subreddit}}">
     <div class="card" style="width: 20rem;">
             <div class="card-body">
                 <h4 class="card-title">{{ post.title }}</h4>
                 <p class="card-text">{{ post.pub_date }}</p>
             </div>
        </div>
-    </div>
-{% endfor %}
+	</div>
 
+{% endfor %}
+</div>
+<script>
+var list = document.getElementsByClassName("list");
+for(i = 0; i < list.length; i++) {
+	list[i].hidden = true
+}
+var lister = document.getElementById("selector")
+listing(lister.value)
+
+lister.addEventListener("change", function() {
+	listing(lister.value)
+});
+
+function listing(value) {
+	console.log("trigger")
+	list1 = document.getElementsByClassName(value);
+	list2 = document.getElementsByClassName("list");
+	for(i = 0; i < list2.length; i++) {
+		list2[i].hidden = true;
+	}
+	for(i = 0; i < list1.length; i++) {
+		list1[i].hidden = false;
+	}
+}
+
+
+
+</script>
 {% endblock %}
 </html>

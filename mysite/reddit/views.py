@@ -33,9 +33,9 @@ def archives(request):
     for sub in Reddit_Post.objects.all():
         sub_name = sub.subreddit
         subname_list.add(sub_name)
-        # qs = Reddit_Post.objects.filter(subreddit=sub_name).order_by('-pub_date')
+    qs = Reddit_Post.objects.order_by('-pub_date')
    
-    return render(request, 'reddit/archives.html', {'set': subname_list})
+    return render(request, 'reddit/archives.html', {'set': subname_list, 'reddit': qs})
 
 def search(request):
 
