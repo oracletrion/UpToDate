@@ -77,7 +77,7 @@ def search(request):
 	
 	                # this avoids integrity errors from unique constraints
 	            
-	                    Reddit_Post.objects.get_or_create(subreddit=sub_name,title=submission.title,pub_date=time)
+	                    Reddit_Post.objects.get_or_create(subreddit=sub_name,title=submission.title,pub_date=time, link=submission.url)
 	                    limits -= 1
 	                    print ("Limits in if", limits)
 	                  
@@ -89,7 +89,8 @@ def search(request):
 	            if limits == 0:
 	                break
             except prawcore.NotFound:
-                return HttpResponse("not found") + render('reddit/index.html')
+                qs = Reddit_Post.objects.order_by('-pub_date')
+                return render(request, 'reddit/indexerr.html', {'reddit': qs, 'sub_name': sub_name})
 #                 return redirect('form')
             
         qs = Reddit_Post.objects.filter(subreddit=sub_name).order_by('-pub_date')

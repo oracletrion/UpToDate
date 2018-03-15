@@ -21,11 +21,12 @@
   <ul class = 'list-group'>
 {% for post in reddit %}
  <div class="listings row justify-content-center align-self-center">
-	<div class="card" style="width: 20rem; background-color: #96add3; opacity: 0.9">
+	<div class="card" style="width: 20rem; background-color: #b6cbed; opacity: 0.9">
 		<div class="card-body"  background-color="yellow">
 			<h4 class="card-title">{{ post.title }}</h4>
 			<p class="card-text">{{ post.pub_date }}</p>
-			<a href="http://www.reddit.com">Reddit link</a>
+			<a href="{{post.link}}">Reddit link</a>
+			<div style="float: right"><i>Save:</i> <input type="checkbox" class="fav reddit" id="{{post.id}}"></div>
 		</div>
 	</div>
 </div>
@@ -33,13 +34,18 @@
 </ul>
 <script>
 
+
+
+
 var list = document.getElementsByClassName("listings");
 for(i = 3; i < list.length; i++) {
 	list[i].hidden = true;
 }
 showcounter = 4;
 removecounter = 0;
-var cycle = setInterval(function () {
+
+
+setInterval(function () {
 	
 	temp = removecounter;
 	temp2 = showcounter;
@@ -51,6 +57,7 @@ var cycle = setInterval(function () {
 		if(op < 0) {
 			list[temp].hidden = true;
 			list[temp2].hidden = false;
+			list[temp2].style.opacity = 1;
 			window.clearInterval(fade);
 		}
 	}, 10);
@@ -58,9 +65,20 @@ var cycle = setInterval(function () {
 	showcounter++;
 	console.log("rest");
 	
+	if (showcounter >= list.length + 4)
+	{
+    	for (var i = 0; i < 4; ++i)
+    	{
+            list[i].hidden = false;
+            list[i].style.opacity = 1;	
+    	}
+    	showcounter = 4;
+    	removecounter = 0;
+	}
+	
 }, 3000);
 
-</script
+</script>
 {% endblock %}
 
 </html>
