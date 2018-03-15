@@ -8,7 +8,8 @@ from django.urls import reverse
 import requests
 import praw
 import datetime
-
+import twitter
+import json
 
 from .models import Subreddit_Info, Reddit_Post
 from django.shortcuts import redirect
@@ -24,6 +25,15 @@ def form(request):
 
 def youtube(request):
     return render(request, 'reddit/results.html')
+
+# def twitter(request):
+#     api = twitter.Api(consumer_key='RTFA7AJK32oqVqxNpePQ8ML7J',
+#                   consumer_secret='aZy708i2jRW5K0QWujjVedMIVHepeT3ywYOogFC1sMRJNTHwTA',
+#                   access_token_key='974079585171136512-CquWg1lGWu4nHQxSkOrSC3Rk8xeUAPS',
+#                   access_token_secret='aXNhllvBHxqkESE7liT4qkwj4RQN2HnzTc1nIu9hzzXoC')
+#     results = api.GetSearch(raw_query="q=twitter%20&result_type=recent&since=2014-07-19&count=100")
+#     print (results)
+#     return render(request, 'reddit/results.html', {'twitter_results' : results})
 
 def archives(request):
 
@@ -100,9 +110,23 @@ def search(request):
                 break
             
         qs = Reddit_Post.objects.filter(subreddit=sub_name).order_by('-pub_date')
-         
+
+        api = twitter.Api(consumer_key='RTFA7AJK32oqVqxNpePQ8ML7J',
+                consumer_secret='aZy708i2jRW5K0QWujjVedMIVHepeT3ywYOogFC1sMRJNTHwTA',
+                access_token_key='974079585171136512-CquWg1lGWu4nHQxSkOrSC3Rk8xeUAPS',
+                access_token_secret='aXNhllvBHxqkESE7liT4qkwj4RQN2HnzTc1nIu9hzzXoC')
+        # print(api.VerifyCredentials())
+        results = api.GetSearch(raw_query="q={}%20&result_type=recent&since=2014-07-19&count=5".format(sub_name))
+        # print (results.AsDict())
+
+        YOUTUBE_API_SERVICE_NAME = 'youtube'
+        YOUTUBE_API_VERSION = 'v3'
+
+        r = requests.get("https://www.googleapis.com/youtube/v3/videos?key=AIzaSyAUVFVHPo7dFJ53756t50YqrmVfPF5laKE&part=snippet&chart=mostPopular&regionCode=US")
+        data = json.loads(r.text)
+
    
-        return render(request, 'reddit/results.html', {'reddit': qs, 'title': sub_name})
+        return render(request, 'reddit/results.html', {'reddit': qs, 'title': sub_name, 'tweets' : results, 'youtube_results': data})
         #return HttpResponse(titles)#subreddit.display_name + subreddit.title + subreddit.description)
         
     else:
