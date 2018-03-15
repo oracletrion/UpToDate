@@ -30,3 +30,28 @@ class Reddit_Post(models.Model):
     class Meta:
         unique_together = ["subreddit", "title", "pub_date"]
         
+
+class Twitter_Post(models.Model):
+    message = models.CharField(max_length=350, default='')
+    username = models.CharField(max_length=100, default='')
+    handle = models.CharField(max_length=100, default='')
+    pub_date = models.CharField(max_length=100, default='')
+    def __str__(self):
+        return self.message
+    class Meta:
+        unique_together = ["message", "handle", "username", "pub_date"]
+
+
+
+class Saved_Post(models.Model):
+    userid = models.IntegerField(default=-1)
+    post_type = models.CharField(max_length=20, default='null')
+    postid = models.IntegerField(default=-1)
+
+    
+
+    # note that default ID is -2, to avoid any accidents from
+    #   setting Users to the default saved_post userid value of -1
+class User_Info(models.Model):
+    userid = models.IntegerField(default=-2)
+    username = models.CharField(max_length=100, default='null')
