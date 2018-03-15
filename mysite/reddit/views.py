@@ -10,6 +10,8 @@ import praw
 import datetime
 import twitter
 import json
+import time
+# from datetime import *
 
 from .models import Subreddit_Info, Reddit_Post
 from django.shortcuts import redirect
@@ -115,9 +117,8 @@ def search(request):
                 consumer_secret='aZy708i2jRW5K0QWujjVedMIVHepeT3ywYOogFC1sMRJNTHwTA',
                 access_token_key='974079585171136512-CquWg1lGWu4nHQxSkOrSC3Rk8xeUAPS',
                 access_token_secret='aXNhllvBHxqkESE7liT4qkwj4RQN2HnzTc1nIu9hzzXoC')
-        # print(api.VerifyCredentials())
-        results = api.GetSearch(raw_query="q={}%20&result_type=recent&since=2014-07-19&count=5".format(sub_name))
-        # print (results.AsDict())
+        
+        results = api.GetSearch(raw_query="q={}%20&result_type=popular&lang=en&count=5".format(sub_name))
 
         YOUTUBE_API_SERVICE_NAME = 'youtube'
         YOUTUBE_API_VERSION = 'v3'
