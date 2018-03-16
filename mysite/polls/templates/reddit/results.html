@@ -2,20 +2,21 @@
 <html>
 {% extends 'layout.html' %}
 {% block body %}
-<body background="https://i.imgur.com/IQi3GBJ.jpg" style="background-size:3008px 2000px">
+<body background="https://i.imgur.com/8Ul47EP.jpg" style="background-size:1600px 700px">
 <div class="container">
 <div class="row justify-content-center align-self-center"</div>
-	<h1>results: {{ title }}</h1>
+	<br> <br>
+	<h1 style="font-family:Gill Sans; font-size:300%">Results: {{ title }}</h1>
 </div>
 
 <!-- {{youtube_results}} -->
 
 <div class="block social-block social-twitter row justify-content-center align-self-center" style="float: left; width: 34%; min-width: 22rem; margin: auto">
-	<h1>Twitter</h1>
+	<h1 style="font-family:Marker Felt; font-size:200%">Twitter</h1>
 	{% load twitter_tags %}
     <ul class = 'list-group'>
         {% for tweet in tweets %}
-		<div class="card" style="width: 20rem; background-color: #ddccff">
+		<div class="card" style="width: 20rem; background-color: #e6ffff; opacity: 0.85">
 			<div class="tweet-meta card-body">
 				<p>{{ tweet|expand_tweet_urls|urlize_tweet_text|safe }}</p>
 				<a href="https://www.twitter.com/{{ tweet.user.screen_name }}/status/{{ tweet.id }}" target="_blank">
@@ -29,10 +30,10 @@
 </div>
 <!-- {{twitter_results}} -->
 <div class="row justify-content-center align-self-center" style="width: 32%; min-width: 22rem; float: left; margin: auto">
-<h1>Reddit</h1>
+<h1 style="font-family:Marker Felt; font-size:200%">Reddit</h1>
 <ul class = 'list-group'>
 {% for post in reddit %}
-	<div class="card" style="width: 20rem; background-color: #b6cbed">
+	<div class="card" style="width: 20rem; background-color: #ffffff; opacity: 0.85">
 		<div class="card-body">
 			<h4 class="card-title">{{ post.title }}</h4>
 			<p class="card-text">{{ post.pub_date }}</p>
@@ -46,10 +47,10 @@
 
 
 <div class="row justify-content-center align-self-center" style="width: 34%; min-width: 22rem; float: left; margin: auto">
-<h1>YouTube</h1>
+<h1 style="font-family:Marker Felt; font-size:200%">YouTube</h1>
 <ul class = 'list-group'>
 {% for yt in youtube_results %}
-	<div class="card" style="width: 20rem; background-color: #ff9999">
+	<div class="card" style="width: 20rem; background-color: #ffe6e6; opacity: 0.85">
 		<div class="card-body">
 			<h4 class="card-title"></h4>
 			<p class="card-text"></p>

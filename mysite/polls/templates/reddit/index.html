@@ -3,12 +3,11 @@
 {% extends 'layout.html' %}
 
 {% load static %}
-
 {% block body %}
-<body background="https://i.imgur.com/IQi3GBJ.jpg" style="background-size:3008px 2000px; overflow: hidden">
-  <div class = "jumbotron text-center" style="background: none">
-    <h1>Up to Date</h1>
-    <p class = "lead"> What would you like to know about?</p>
+<body background="https://i.imgur.com/8Ul47EP.jpg" style="background-size:1600px 700px; overflow: hidden">
+    <div class = "jumbotron text-center" style="background: none">
+    <h1 style="font-family:Marker Felt; font-size:500%">Up to Date</h1>
+    <h2 class = "lead"> What would you like to know about?</h2>
   </div>
 
   <form method='POST' action='../search/'>
@@ -23,7 +22,7 @@
     <ul class = 'list-group' style="width: 32%; min-width: 22rem; float: left; margin: auto">
         {% for tweet in tweets %}
         <div class="twitlist row justify-content-center align-self-center">
-    	<div class="card" style="width: 20rem; background-color: #ddccff">
+    	<div class="card" style="width: 20rem; background-color: #e6ffff; opacity: 0.85">
     		<div class="tweet-meta card-body">
     			<p>{{ tweet|expand_tweet_urls|urlize_tweet_text|safe }}</p>
     			<a href="https://www.twitter.com/{{ tweet.user.screen_name }}/status/{{ tweet.id }}" target="_blank">
@@ -41,7 +40,7 @@
     <ul class = 'list-group' style="float: left; width: 34%; min-width: 22rem; margin: auto">
         {% for post in reddit %}
          <div class="redlist row justify-content-center align-self-center">
-        	<div class="card" style="width: 20rem; background-color: #b6cbed; opacity: 0.9">
+        	<div class="card" style="width: 20rem; background-color: #ffffff; opacity: 0.85">
         		<div class="card-body">
         			<h4 class="card-title">{{ post.title }}</h4>
         			<p class="card-text">{{ post.pub_date }}</p>
