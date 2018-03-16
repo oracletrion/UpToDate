@@ -18,6 +18,8 @@ def urlize_tweet_text(tweet):
     """ Turn #hashtag and @username in status text to Twitter hyperlinks,
         similar to the ``urlize()`` function in Django.
     """
+#     print("URLIZE TWEET TEXT")
+    
     try:
         from urllib import quote
     except ImportError:
@@ -29,6 +31,8 @@ def urlize_tweet_text(tweet):
         text = text.replace('#%s' % hash.text, hashtag_url % (quote(hash.text.encode("utf-8")), hash.text))
     for mention in tweet.user_mentions:
         text = text.replace('@%s' % mention.screen_name, user_url % (quote(mention.screen_name), mention.screen_name))
+        
+#     print("URLIZE TWEET TEXT DONE")
     return text
 
 @register.filter()
@@ -36,9 +40,11 @@ def expand_tweet_urls(tweet):
     """ Replace shortened URLs with long URLs in the twitter status
         Should be used before urlize_tweet
     """
+#     print("EXPAND TWEET URLS")
     text = tweet.text
     urls = tweet.urls
     for url in urls:
         text = text.replace(url.url, '<a href="%s" target="_blank">%s</a>' % (url.expanded_url, url.url))
     tweet.text = text
+#     print("EXPAND TWEET URLS DONE")
     return tweet

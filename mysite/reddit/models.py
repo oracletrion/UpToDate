@@ -37,6 +37,9 @@ class Twitter_Post(models.Model):
     handle = models.CharField(max_length=100, default='')
     pub_date = models.CharField(max_length=100, default='')
     icon = models.CharField(max_length=200, default='')
+    urls = models.CharField(max_length=3000, default='')
+    hash = models.CharField(max_length=500, default='')
+    mentions = models.CharField(max_length=2000, default='')
     def __str__(self):
         return self.message
     class Meta:

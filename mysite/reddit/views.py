@@ -31,15 +31,40 @@ def form(request):
     
     for elem in tw:
         tw_status = twitter.models.Status()
+        tw_status.user = twitter.models.User()
+        tw_status.urls = []
+        tw_status.hashtags = []
+        tw_status.user_mentions = []
+        
+        url_list = elem.urls.split()
+        for (e_url, url) in zip(url_list[0::2], url_list[1::2]):
+#             print("url: ", e_url, " | ", url)
+            newUrl = twitter.models.Url()
+            newUrl.expanded_url = e_url
+            newUrl.url = url
+            tw_status.urls.append(newUrl)
+        
+        
+        for hash in elem.hash.split():
+#             print(" >> ", hash)
+            newHash = twitter.models.Hashtag()
+            newHash.text = hash
+            tw_status.hashtags.append(newHash)
+            
+            
+        for mention in elem.mentions.split():
+            newMention = twitter.models.User()
+            newMention.screen_name = mention
+            tw_status.user_mentions.append(newMention)
+
+            
         tw_status.text = elem.message
-        tw_status.user = twitter.models.User
         tw_status.user.name = elem.username
         tw_status.user.screen_name = elem.handle
         tw_status.created_at = elem.pub_date
         tw_status.user.profile_image_url = elem.icon
         
         tw_list.append(tw_status)
-    
     
     
     return render(request, 'reddit/index.html', {'reddit' : qs, 'tweets' : tw_list})
@@ -174,7 +199,26 @@ def search(request):
             #   icon
 
         for message in results:
-            Twitter_Post.objects.get_or_create(message=message.text, username=message.user.name, handle=message.user.screen_name, pub_date=message.created_at, icon=message.user.profile_image_url)
+            all_urls = ''
+            all_hash = ''
+            all_mentions = ''
+            for urls in message.urls:
+                all_urls += urls.expanded_url
+                all_urls += ' '
+                all_urls += urls.url
+                all_urls += ' '
+                
+            print(message.hashtags)
+            for hash in message.hashtags:
+                all_hash += hash.text
+                all_hash += ' '
+                
+                
+            for mention in message.user_mentions:
+                all_mentions += mention.screen_name
+                all_mentions += ' '
+        
+            Twitter_Post.objects.get_or_create(message=message.text, username=message.user.name, handle=message.user.screen_name, pub_date=message.created_at, icon=message.user.profile_image_url, urls=all_urls, hash=all_hash, mentions=all_mentions)
 
 
         YOUTUBE_API_SERVICE_NAME = 'youtube'
