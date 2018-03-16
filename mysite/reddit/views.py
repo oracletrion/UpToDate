@@ -130,6 +130,9 @@ def search(request):
     #     print(subreddit.title)          # Output: reddit Development
     #     print(subreddit.description)    # Output: A subreddit for discussion of ...
     
+        qs = []
+        notFound_flag = False
+        
         titles = "<b>" + subreddit.display_name + "</b><br/><br/>"
         i = 1
         limits = 5
@@ -169,13 +172,23 @@ def search(request):
 	#             red_post.save()
 	            if limits == 0:
 	                break
-            except prawcore.NotFound:
-                qs = Reddit_Post.objects.order_by('-pub_date')
-                return render(request, 'reddit/indexerr.html', {'reddit': qs, 'sub_name': sub_name})
-#                 return redirect('form')
+            except (prawcore.NotFound, prawcore.Redirect) as e:
+                print("reddit exception")
+                temp = Reddit_Post()
+                temp.title = 'No "{}" subreddit was found'.format(sub_name)
+                qs.append(temp)
+                notFound_flag = True
+                break
             
-        qs = Reddit_Post.objects.filter(subreddit=sub_name).order_by('-pub_date')
+#                 qs = Reddit_Post.objects.order_by('-pub_date')
+#                 return render(request, 'reddit/indexerr.html', {'reddit': qs, 'sub_name': sub_name})
+            
+        if (not notFound_flag):
+            qs = Reddit_Post.objects.filter(subreddit=sub_name).order_by('-pub_date')
 
+        print("reddit done")
+            
+            
         api = twitter.Api(consumer_key='RTFA7AJK32oqVqxNpePQ8ML7J',
                 consumer_secret='aZy708i2jRW5K0QWujjVedMIVHepeT3ywYOogFC1sMRJNTHwTA',
                 access_token_key='974079585171136512-CquWg1lGWu4nHQxSkOrSC3Rk8xeUAPS',
@@ -183,12 +196,13 @@ def search(request):
         
         results = api.GetSearch(raw_query="q={}%20&result_type=popular&lang=en&count=5".format(sub_name))
         
-            # there is an error displaying twitter user icons on some
-            #   browsers/setups for some reason. Shows up as a broken
-            #   image link, even though the link itself is correct.
-#         for user_result in results:
-#             print(user_result.user.profile_image_url)
-
+        
+        print("twitter api done")
+        
+        
+        
+        
+        
 
 
             # Twitter_Post fields:
@@ -208,7 +222,7 @@ def search(request):
                 all_urls += urls.url
                 all_urls += ' '
                 
-            print(message.hashtags)
+#             print(message.hashtags)
             for hash in message.hashtags:
                 all_hash += hash.text
                 all_hash += ' '
@@ -219,6 +233,46 @@ def search(request):
                 all_mentions += ' '
         
             Twitter_Post.objects.get_or_create(message=message.text, username=message.user.name, handle=message.user.screen_name, pub_date=message.created_at, icon=message.user.profile_image_url, urls=all_urls, hash=all_hash, mentions=all_mentions)
+            
+
+        
+        if not results:
+            tw_status = twitter.models.Status()
+            tw_status.user = twitter.models.User()
+            tw_status.urls = []
+            tw_status.hashtags = []
+            tw_status.user_mentions = []
+            
+            newUrl = twitter.models.Url()
+            newUrl.expanded_url = ''
+            newUrl.url = ''
+            tw_status.urls.append(newUrl)
+            
+            
+            newHash = twitter.models.Hashtag()
+            newHash.text = ''
+            tw_status.hashtags.append(newHash)
+                
+                
+            newMention = twitter.models.User()
+            newMention.screen_name = ''
+            tw_status.user_mentions.append(newMention)
+    
+                
+            tw_status.text = 'No "{}" results were found.'.format(sub_name)
+            
+            tw_status.created_at = datetime.datetime.now()
+            tw_status.created_at = tw_status.created_at.strftime("%a %b %d %H:%M:%S +0000 %Y")
+            
+#             print(tw_status.created_at)
+            
+            
+            
+            results.append(tw_status)
+            
+            print("twitter no results")
+            
+        print("results:", results)
 
 
         YOUTUBE_API_SERVICE_NAME = 'youtube'
