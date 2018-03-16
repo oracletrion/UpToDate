@@ -46,15 +46,14 @@
 
 
 <div class="row justify-content-center align-self-center" style="width: 34%; min-width: 22rem; float: left; margin: auto">
-<h1>YT Placeholder</h1>
+<h1>YouTube</h1>
 <ul class = 'list-group'>
-{% for post in reddit %}
+{% for yt in youtube_results %}
 	<div class="card" style="width: 20rem; background-color: #ff9999">
 		<div class="card-body">
-			<h4 class="card-title">{{ post.title }}</h4>
-			<p class="card-text">{{ post.pub_date }}</p>
-			<a href="{{post.link}}">Reddit link</a>
-			<div style="float: right"><i>Save:</i> <input type="checkbox" class="fav reddit" id="{{post.id}}"></div>
+			<h4 class="card-title"></h4>
+			<p class="card-text"></p>
+			<iframe width="265" height="175" src="http://www.youtube.com/embed/{{yt.ytid}}" frameborder="0" allowfullscreen></iframe>
 		</div>
 	</div>
 	{% endfor %}

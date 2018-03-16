@@ -29,7 +29,7 @@ class Reddit_Post(models.Model):
         return self.title
     class Meta:
         unique_together = ["subreddit", "title", "pub_date"]
-        
+
 
 class Twitter_Post(models.Model):
     message = models.CharField(max_length=350, default='')
@@ -45,6 +45,14 @@ class Twitter_Post(models.Model):
     class Meta:
         unique_together = ["message", "handle", "username", "pub_date"]
 
+class Youtube_Post(models.Model):
+    ytid = models.CharField(max_length=20, default='')
+    searchQuery = models.CharField(max_length=200, default='')
+    def __str__(self):
+        return self.ytid
+    class Meta:
+        unique_together = ["ytid", "searchQuery"]
+
 
 
 class Saved_Post(models.Model):
@@ -52,7 +60,7 @@ class Saved_Post(models.Model):
     post_type = models.CharField(max_length=20, default='null')
     postid = models.IntegerField(default=-1)
 
-    
+
 
     # note that default ID is -2, to avoid any accidents from
     #   setting Users to the default saved_post userid value of -1

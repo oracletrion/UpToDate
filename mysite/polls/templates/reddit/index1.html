@@ -1,0 +1,47 @@
+<!doctype HTML>
+<html>
+
+<form method="POST" action="../search/">
+
+{% csrf_token %}
+{% load static %}
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="{% static 'reddit/indexCSS.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,700i" rel="stylesheet">
+<style>
+.content {
+  max-width: 500px;
+  margin: auto;
+}
+</style>
+</head>
+
+<body>
+<div class="container-full">
+
+      <div class="row">
+       
+        <div class="col-lg-12 text-center v-center">
+          <div class="welcome">
+            <h1 style="text-align:center">Up To Date</h1>
+            <p style="color:black;font-size: 150%;">What would you like to know about?</p>
+          </div>
+          
+          <br>
+          
+          <div align="center"><form class="col-lg-12">
+            <div class="input-group input-group-lg col-sm-offset-4 col-sm-4 text-center">
+              <input type="text" class="center-block form-control input-lg" title="Search" name="sub_name" placeholder="Enter topic here">
+              <span class="input-group-btn"><button class="btn btn-lg btn-primary text-center" type="submit">SEARCH</button></span>
+            </div>
+          </form></div>
+        </div>
+        
+      </div> <!-- /row -->
+  
+  	<br><br><br><br><br>
+</div> <!-- /container full -->
+</body>
+</html>
