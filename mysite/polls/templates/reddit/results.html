@@ -23,6 +23,7 @@
 					<img src="{{ tweet.user.profile_image_url }}" width="32" height="32" />&nbsp;&nbsp;&nbsp;{{ tweet.user.name }}<br />
 					<p><span>@{{ tweet.user.screen_name }} &middot; {{ tweet.created_at|twitter_date }}</span></p>
 				</a>
+				<div style="float: right"><i>Save:</i> <input type="checkbox" class="fav twitter" id="{{post.id}}"></div>
 			</div>
 		</div>
         {% endfor %}
@@ -55,6 +56,7 @@
 			<h4 class="card-title"></h4>
 			<p class="card-text"></p>
 			<iframe width="265" height="175" src="http://www.youtube.com/embed/{{yt.ytid}}" frameborder="0" allowfullscreen></iframe>
+			<div style="float: right"><i>Save:</i> <input type="checkbox" class="fav youtube" id="{{post.id}}"></div>
 		</div>
 	</div>
 	{% endfor %}

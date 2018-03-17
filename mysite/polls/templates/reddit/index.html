@@ -18,7 +18,8 @@
     </div>
   </form>
     
-{% load twitter_tags %}
+  <div style="max-width: 75rem; margin:0 auto;">
+	{% load twitter_tags %}
     <ul class = 'list-group' style="width: 32%; min-width: 22rem; float: left; margin: auto">
         {% for tweet in tweets %}
         <div class="twitlist row justify-content-center align-self-center">
@@ -29,7 +30,7 @@
     				<img src="{{ tweet.user.profile_image_url }}" width="32" height="32" />&nbsp;&nbsp;&nbsp;{{ tweet.user.name }}<br />
     				<p><span>@{{ tweet.user.screen_name }} &middot; {{ tweet.created_at|twitter_date }}</span></p>
     			</a>
-    			<div style="float: right"><i>Save:</i> <input type="checkbox" class="fav reddit" id="{{post.id}}"></div>
+    			<div style="float: right"><i>Save:</i> <input type="checkbox" class="fav twitter" id="{{post.id}}"></div>
     		</div>
     	</div>
         </div>
@@ -37,7 +38,7 @@
     </ul>
   
   
-    <ul class = 'list-group' style="float: left; width: 34%; min-width: 22rem; margin: auto">
+    <ul class = 'list-group' style="float: left; width: 32%; min-width: 22rem; margin: auto">
         {% for post in reddit %}
          <div class="redlist row justify-content-center align-self-center">
         	<div class="card" style="width: 20rem; background-color: #ffffff; opacity: 0.85">
@@ -53,6 +54,24 @@
     </ul>
     
     
+    
+    <ul class = 'list-group' style="float: left; width: 34%; min-width: 22rem; margin: auto">
+        {% for post in yt %}
+         <div class="ytlist row justify-content-center align-self-center">
+			<div class="card" style="width: 20rem; background-color: #ffe6e6; opacity: 0.85">
+				<div class="card-body">
+					<h4 class="card-title"></h4>
+					<p class="card-text"></p>
+					<iframe width="265" height="175" src="http://www.youtube.com/embed/{{post.ytid}}" frameborder="0" allowfullscreen></iframe>
+					<div style="float: right"><i>Save:</i> <input type="checkbox" class="fav youtube" id="{{post.id}}"></div>
+				</div>
+			</div>
+          </div>
+        {% endfor %}
+    </ul>
+  </div>
+    
+    
 </body>
   
   
@@ -60,6 +79,8 @@
 
 var list1 = document.getElementsByClassName("redlist");
 var list2 = document.getElementsByClassName("twitlist");
+var list3 = document.getElementsByClassName("ytlist");
+
 for(i = 3; i < list1.length; i++) {
 	list1[i].hidden = true;
     list1[i].style.opacity = 0;
@@ -68,10 +89,15 @@ for(i = 3; i < list2.length; i++) {
     list2[i].hidden = true;
     list2[i].style.opacity = 0;
 }
+for(i = 3; i < list3.length; i++) {
+    list3[i].hidden = true;
+    list3[i].style.opacity = 0;
+}
 
     // lock variables are like unreliable mutexes....
 var counter1 = {showcounter: 4, removecounter: 0, fade: null, lock: false};
 var counter2 = {showcounter: 4, removecounter: 0, fade: null, lock: false};
+var counter3 = {showcounter: 4, removecounter: 0, fade: null, lock: false};
 
 
     // these are written to cause random delays, so the
@@ -97,6 +123,13 @@ setInterval(function () {
     delay = Math.floor(Math.random() * 1950);
     setTimeout(function() {
         update(list2, counter2);
+    }, delay);
+}, 4000);
+
+setInterval(function () {
+    delay = Math.floor(Math.random() * 2100);
+    setTimeout(function() {
+        update(list3, counter3);
     }, delay);
 }, 4000);
 

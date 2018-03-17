@@ -22,9 +22,11 @@ def index(request):
 	return redirect('form')
 
 def form(request):
-    qs = Reddit_Post.objects.order_by('-pub_date')
+    qs = Reddit_Post.objects.order_by('-pub_date')[:15]
 
-    tw = Twitter_Post.objects.order_by('-id')
+    yt = Youtube_Post.objects.order_by('-id')[:15]
+    
+    tw = Twitter_Post.objects.order_by('-id')[:15]
 
     tw_list = []
 
@@ -66,7 +68,7 @@ def form(request):
         tw_list.append(tw_status)
 
 
-    return render(request, 'reddit/index.html', {'reddit' : qs, 'tweets' : tw_list})
+    return render(request, 'reddit/index.html', {'reddit' : qs, 'tweets' : tw_list, 'yt' : yt})
 
 
 def archives(request):
@@ -248,7 +250,7 @@ def search(request):
 
             print("twitter no results")
 
-        print("results:", results)
+#         print("results:", results)
 
 ####Youtube integration begin####
 
@@ -258,9 +260,16 @@ def search(request):
 
         r = requests.get("https://www.googleapis.com/youtube/v3/search?key=AIzaSyAUVFVHPo7dFJ53756t50YqrmVfPF5laKE&part=snippet&q={}".format(sub_name))
         data = json.loads(r.text)
+#         print("-------------")
+#         print(data)
+#         print("-------------")
         for i in range(0,5):
-            videoid= (data['items'][i]['id']['videoId'])
-            Youtube_Post.objects.get_or_create(ytid=videoid, searchQuery=sub_name)
+            if 'videoId' in (data['items'][i]['id']):
+                print((data['items'][i]['id']['videoId']))
+                videoid= (data['items'][i]['id']['videoId'])
+                Youtube_Post.objects.get_or_create(ytid=videoid, searchQuery=sub_name)
+#             else:
+#                 print((data['items'][i]['id']))
 
         yt = Youtube_Post.objects.filter(searchQuery=sub_name)
 
