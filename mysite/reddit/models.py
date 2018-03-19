@@ -40,6 +40,7 @@ class Twitter_Post(models.Model):
     urls = models.CharField(max_length=3000, default='')
     hash = models.CharField(max_length=500, default='')
     mentions = models.CharField(max_length=2000, default='')
+    searchQuery = models.CharField(max_length=200, default='')
     def __str__(self):
         return self.message
     class Meta:

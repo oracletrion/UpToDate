@@ -210,7 +210,7 @@ def search(request):
                 all_mentions += mention.screen_name
                 all_mentions += ' '
 
-            Twitter_Post.objects.get_or_create(message=message.text, username=message.user.name, handle=message.user.screen_name, pub_date=message.created_at, icon=message.user.profile_image_url, urls=all_urls, hash=all_hash, mentions=all_mentions)
+            Twitter_Post.objects.get_or_create(searchQuery=sub_name, message=message.text, username=message.user.name, handle=message.user.screen_name, pub_date=message.created_at, icon=message.user.profile_image_url, urls=all_urls, hash=all_hash, mentions=all_mentions)
 
 
 
