@@ -1,47 +1,199 @@
 <!doctype HTML>
 <html>
+{% extends 'layout.html' %}
 
-<form method="POST" action="../search/">
-
-{% csrf_token %}
 {% load static %}
+{% block body %}
+<body background="https://i.imgur.com/8Ul47EP.jpg" style="background-size:1600px 700px; overflow: hidden">
+    <div class = "jumbotron text-center" style="background: none">
+    <h1 style="font-family:Marker Felt; font-size:500%">Up to Date</h1>
+    <h2 class = "lead"> What would you like to know about?</h2>
+  </div>
 
-<head>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="{% static 'reddit/indexCSS.css' %}">
-<link href="https://fonts.googleapis.com/css?family=Roboto:400,700i" rel="stylesheet">
-<style>
-.content {
-  max-width: 500px;
-  margin: auto;
-}
-</style>
-</head>
-
-<body>
-<div class="container-full">
-
-      <div class="row">
-       
-        <div class="col-lg-12 text-center v-center">
-          <div class="welcome">
-            <h1 style="text-align:center">Up To Date</h1>
-            <p style="color:black;font-size: 150%;">What would you like to know about?</p>
-          </div>
-          
-          <br>
-          
-          <div align="center"><form class="col-lg-12">
-            <div class="input-group input-group-lg col-sm-offset-4 col-sm-4 text-center">
-              <input type="text" class="center-block form-control input-lg" title="Search" name="sub_name" placeholder="Enter topic here">
-              <span class="input-group-btn"><button class="btn btn-lg btn-primary text-center" type="submit">SEARCH</button></span>
-            </div>
-          </form></div>
+  <form method='POST' action='../search/'>
+    <div class="form-group row justify-content-center align-self-center">
+            {% csrf_token %}
+			<input type="text" name="sub_name" class="form-control" id="url-box" placeholder="Enter Search Term..." style="max-width: 300px;" autofocus required>
+			<button type="submit" class="btn btn-default">Search</button>
+    </div>
+  </form>
+    
+  <div style="max-width: 75rem; margin:0 auto;">
+	{% load twitter_tags %}
+    <ul class = 'list-group' style="width: 32%; min-width: 22rem; float: left; margin: auto">
+        {% for tweet in tweets %}
+        <div class="twitlist row justify-content-center align-self-center">
+    	<div class="card" style="width: 20rem; background-color: #e6ffff; opacity: 0.85">
+    		<div class="tweet-meta card-body">
+    			<p>{{ tweet|expand_tweet_urls|urlize_tweet_text|safe }}</p>
+    			<a href="https://www.twitter.com/{{ tweet.user.screen_name }}/status/{{ tweet.id }}" target="_blank">
+    				<img src="{{ tweet.user.profile_image_url }}" width="32" height="32" />&nbsp;&nbsp;&nbsp;{{ tweet.user.name }}<br />
+    				<p><span>@{{ tweet.user.screen_name }} &middot; {{ tweet.created_at|twitter_date }}</span></p>
+    			</a>
+    			<div style="float: right"><i>Save:</i> <input type="checkbox" class="fav twitter" id="{{post.id}}"></div>
+    		</div>
+    	</div>
         </div>
-        
-      </div> <!-- /row -->
+        {% endfor %}
+    </ul>
   
-  	<br><br><br><br><br>
-</div> <!-- /container full -->
+  
+    <ul class = 'list-group' style="float: left; width: 32%; min-width: 22rem; margin: auto">
+        {% for post in reddit %}
+         <div class="redlist row justify-content-center align-self-center">
+        	<div class="card" style="width: 20rem; background-color: #ffffff; opacity: 0.85">
+        		<div class="card-body">
+        			<h4 class="card-title">{{ post.title }}</h4>
+        			<p class="card-text">{{ post.pub_date }}</p>
+        			<a href="{{post.link}}">Reddit link</a>
+        			<div style="float: right"><i>Save:</i> <input type="checkbox" class="fav reddit" id="{{post.id}}"></div>
+        		</div>
+        	</div>
+          </div>
+        {% endfor %}
+    </ul>
+    
+    
+    
+    <ul class = 'list-group' style="float: left; width: 34%; min-width: 22rem; margin: auto">
+        {% for post in yt %}
+         <div class="ytlist row justify-content-center align-self-center">
+			<div class="card" style="width: 20rem; background-color: #ffe6e6; opacity: 0.85">
+				<div class="card-body">
+					<h4 class="card-title"></h4>
+					<p class="card-text"></p>
+					<iframe width="265" height="175" src="http://www.youtube.com/embed/{{post.ytid}}" frameborder="0" allowfullscreen></iframe>
+					<div style="float: right"><i>Save:</i> <input type="checkbox" class="fav youtube" id="{{post.id}}"></div>
+				</div>
+			</div>
+          </div>
+        {% endfor %}
+    </ul>
+  </div>
+    
+    
 </body>
+  
+  
+<script>
+
+var list1 = document.getElementsByClassName("redlist");
+var list2 = document.getElementsByClassName("twitlist");
+var list3 = document.getElementsByClassName("ytlist");
+
+for(i = 3; i < list1.length; i++) {
+	list1[i].hidden = true;
+    list1[i].style.opacity = 0;
+}
+for(i = 3; i < list2.length; i++) {
+    list2[i].hidden = true;
+    list2[i].style.opacity = 0;
+}
+for(i = 3; i < list3.length; i++) {
+    list3[i].hidden = true;
+    list3[i].style.opacity = 0;
+}
+
+    // lock variables are like unreliable mutexes....
+var counter1 = {showcounter: 4, removecounter: 0, fade: null, lock: false};
+var counter2 = {showcounter: 4, removecounter: 0, fade: null, lock: false};
+var counter3 = {showcounter: 4, removecounter: 0, fade: null, lock: false};
+
+
+    // these are written to cause random delays, so the
+    //  scrolling effects per source occur out-of-step from
+    //  each other.
+    
+    // keep in mind that the Interval (set to 4000 atm) MUST
+    //  be greater than the possible delay (set to 1900 and 2300), or
+    //  the fade effect will absolutely break.
+    
+    // also note that the random values are _different_ from each other,
+    //  otherwise the random value generated by the two interval
+    //  functions will often produce the same number, since they
+    //  fire at the same time.
+setInterval(function () {
+    delay = Math.floor(Math.random() * 2300);
+    setTimeout(function() {
+        update(list1, counter1);
+    }, delay);
+}, 4000);
+
+setInterval(function () {
+    delay = Math.floor(Math.random() * 1950);
+    setTimeout(function() {
+        update(list2, counter2);
+    }, delay);
+}, 4000);
+
+setInterval(function () {
+    delay = Math.floor(Math.random() * 2100);
+    setTimeout(function() {
+        update(list3, counter3);
+    }, delay);
+}, 4000);
+
+
+
+
+
+function update(list, cnt)
+{
+        // if resetting loop or otherwise busy, do not execute
+    if (cnt.lock)
+    {
+        return;   
+    }
+    
+        // ensure no "stuck" fades bogging up the screen
+    if (cnt.removecounter > 0)
+    {
+        for (var i = 0; i < cnt.removecounter; ++i)
+        {
+            list[i].hidden = true;
+        }
+    }
+    
+	
+	temp = cnt.removecounter;
+	temp2 = cnt.showcounter;
+	op = 0.99;
+	cnt.fade = setInterval(function () {
+		list[temp].style.opacity = op;
+		op-=.01;
+		//console.log(op);
+		if(op <= 0) {
+			list[temp].hidden = true;
+			list[temp2].hidden = false;
+			list[temp2].style.opacity = 1;
+			window.clearInterval(cnt.fade);
+		}
+	}, 10);
+	++cnt.removecounter;
+	++cnt.showcounter;
+	console.log("rest");
+	
+	if (cnt.showcounter >= list.length - 1)
+	{
+    	cnt.lock = true;
+    	for (var i = 0; i < 4; ++i)
+    	{
+            list[i].hidden = false;
+            list[i].style.opacity = 1;	
+    	}
+    	for (var i = 3; i < list.length; ++i)
+    	{
+            list[i].hidden = true;
+    	}
+    	cnt.showcounter = 4;
+    	cnt.removecounter = 0;
+    	cnt.lock = false;
+	}
+}
+
+
+
+</script>
+{% endblock %}
+
 </html>
